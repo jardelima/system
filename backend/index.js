@@ -5,7 +5,6 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const port = 8080;
 
 // MONGODB
 const mongoose = require("mongoose");
@@ -27,9 +26,11 @@ app.use(express.json());
 // ROTAS API
 const registerUsers = require("./routes/registerUsers");
 const loginUsers = require("./routes/loginUsers");
+const authUsers = require("./routes/authUsers");
 
 app.use("/register", registerUsers);
 app.use("/login", loginUsers);
+app.use("/auth/:id", authUsers);
 
 // 
 app.get("/", (req, res) => {
@@ -41,6 +42,6 @@ mongoose
         uri
     )
     .then(() => {
-        app.listen(port);
+        app.listen(process.env.PORT);
     })
     .catch((error) => console.log(error));

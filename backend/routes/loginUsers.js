@@ -1,6 +1,10 @@
+// DOTENV
+require("dotenv").config();
+
 const router = require("express").Router();
 const Users = require("../models/Users.model");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
     const { email, password } = req.body;
@@ -26,11 +30,14 @@ router.post("/", async (req, res) => {
     }
 
     try {
-        const userLogged = {
-            email: user.email
-        };
+        const secret = process.env.SECRET;
 
-        return res.status(200).json({ message: "Login realizado com sucesso", userLogged });
+        const userData = {
+            id: user._id,
+            token: jwt.sign({ id: user._id }, secret),
+        }
+
+        return res.status(200).json({ message: "Login realizado com sucesso", userData });
     } catch (error) {
         return res.status(500).json({ error: error });     
     }

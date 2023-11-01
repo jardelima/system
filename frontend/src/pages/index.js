@@ -52,8 +52,9 @@ function Home() {
                 })
                 .then((response) => {
                     router.push("/dashboard");
-                    dispatch(authUser(values.email));
-                    console.log(response.data);
+                    dispatch(authUser(response.data.userData.id));
+                    localStorage.setItem("token", response.data.userData.token);
+                    localStorage.setItem("id", response.data.userData.id);
                 })
                 .catch((error) => {
                     console.log(error);
